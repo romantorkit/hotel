@@ -3,6 +3,8 @@ package com.foxminded.hotel.model;
 import com.foxminded.hotel.enums.RoomCategory;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,16 +13,17 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@RequiredArgsConstructor
 @Entity
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId;
-    private int roomNumber;
+    @NonNull private Long roomId;
+    @NonNull private int roomNumber;
     @Enumerated(value = EnumType.STRING)
-    private RoomCategory category;
+    @NonNull private RoomCategory category;
     @NotNull
-    private int price;
+    @NonNull private int price;
 
     @OneToMany(mappedBy = "room")
     private List<Booking> bookings = new ArrayList<>();

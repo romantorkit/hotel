@@ -14,6 +14,7 @@ import com.foxminded.hotel.resources.BookingResource;
 import com.foxminded.hotel.resources.ServiceResource;
 import org.springframework.hateoas.Resource;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -64,6 +65,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional
     public BookingResource makeBooking(User user, Long roomId, LocalDate start, LocalDate end, long[] services) {
         List<AdditionalService> list = getServicesList(services);
 

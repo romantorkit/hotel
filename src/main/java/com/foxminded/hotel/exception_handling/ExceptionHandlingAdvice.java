@@ -7,11 +7,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @ControllerAdvice
-public class EntityNotFoundAdvice {
+public class ExceptionHandlingAdvice {
 
     @ResponseBody
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> entityNotFoundHandler(EntityNotFoundException ex) {
         return new ResponseEntity<>(ex, HttpStatus.NOT_FOUND);
+    }
+
+    @ResponseBody
+    @ExceptionHandler(DuplicateEntryException.class)
+    public ResponseEntity<Object> duplicateEntryHandler(DuplicateEntryException ex) {
+        return new ResponseEntity<>(ex, HttpStatus.BAD_REQUEST);
     }
 }

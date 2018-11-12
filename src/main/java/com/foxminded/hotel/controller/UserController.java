@@ -1,11 +1,11 @@
 package com.foxminded.hotel.controller;
 
 import com.foxminded.hotel.model.User;
+import com.foxminded.hotel.resources.BookingResource;
 import com.foxminded.hotel.resources.UserResource;
 import com.foxminded.hotel.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/register", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> register(){
+    public ResponseEntity<Map<String, String>> register(){
         Map<String, String> userRegister = new HashMap<>();
         userRegister.put("userName", null);
         userRegister.put("password", null);
@@ -39,12 +40,12 @@ public class UserController {
     }
 
     @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> register(@RequestBody @Valid User user) {
+    public ResponseEntity<UserResource> register(@RequestBody @Valid User user) {
         return ResponseEntity.status(201).body(userService.create(user));
     }
 
     @GetMapping(path = "/login")
-    public ResponseEntity<?> login(){
+    public ResponseEntity<Map<String,String>> login(){
         Map<String, String> userLogin = new HashMap<>();
         userLogin.put("userName", null);
         userLogin.put("password", null);
@@ -52,7 +53,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/login")
-    public ResponseEntity<?> login(HttpSession session,
+    public ResponseEntity<Object> login(HttpSession session,
                                               @RequestParam String userName,
                                               @RequestParam String password) {
         try {
@@ -65,13 +66,15 @@ public class UserController {
         }
     }
 
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(path = "/{id}")
     public ResponseEntity<UserResource> user(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getById(id));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON_UTF8);
+        return ResponseEntity.ok().body(userService.getById(id));
     }
 
     @GetMapping(path = "/{id}/bookings", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> userBookings(@PathVariable Long id) {
+    public ResponseEntity<List<BookingResource>> userBookings(@PathVariable Long id) {
         return ResponseEntity.ok(userService.getBookingsById(id));
     }
 }

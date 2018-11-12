@@ -1,5 +1,6 @@
 package com.foxminded.hotel.service;
 
+import com.foxminded.hotel.exception_handling.DuplicateEntryException;
 import com.foxminded.hotel.exception_handling.EntityNotFoundException;
 import com.foxminded.hotel.model.AdditionalService;
 import com.foxminded.hotel.model.User;
@@ -53,6 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserResource create(User user) {
 
         if(userRepo.findByUserName(user.getUserName()) == null){
@@ -61,7 +63,7 @@ public class UserServiceImpl implements UserService {
             user = userRepo.save(user);
             return new UserResource(user);
         } else {
-            throw new RuntimeException("User already exists");
+            throw new DuplicateEntryException(User.class, "user", user.getUserName());
         }
 
     }
