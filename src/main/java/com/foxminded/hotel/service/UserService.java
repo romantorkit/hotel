@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    User login(String username, String password) throws Exception;
+    User login(String username, String password);
     UserResource getById(Long id);
     List<BookingResource> getBookingsById(Long id);
     UserResource create(User user);

@@ -2,6 +2,7 @@ package com.foxminded.hotel.service;
 
 import com.foxminded.hotel.controller.BookingController;
 import com.foxminded.hotel.enums.ChargePeriod;
+import com.foxminded.hotel.exception_handling.DuplicateEntryException;
 import com.foxminded.hotel.exception_handling.EntityNotFoundException;
 import com.foxminded.hotel.model.AdditionalService;
 import com.foxminded.hotel.model.Booking;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,6 +27,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
+import static java.lang.String.format;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
@@ -67,15 +70,16 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public BookingResource makeBooking(User user, Long roomId, LocalDate start, LocalDate end, long[] services) {
-        List<AdditionalService> list = getServicesList(services);
 
         Room room = roomRepo.findById(roomId).orElseThrow(() -> new EntityNotFoundException(Room.class, "roomId", String.valueOf(roomId)));
-        int amount = calculateAmount(start, end, room.getPrice());
 
-        amount = calculateServicesPrice(amount, start, end, list);
+        if(bookingExist(start, end, room, user)) {
+            throw new DuplicateEntryException(Booking.class, "user", format("%s %s", user.getFirstName(), user.getLastName()), "room number", String.valueOf(room.getRoomNumber()), "start date", start.format(DateTimeFormatter.BASIC_ISO_DATE), "end date", end.format(DateTimeFormatter.BASIC_ISO_DATE));
+        }
+        int amount = (int)calculateBookingPrice(roomId, start, end, services).getContent();
 
         Booking booking = new Booking(start, end, amount, room, user);
-        booking.setServices(list);
+        booking.setServices(getServicesList(services));
         booking = bookingRepo.save(booking);
         return new BookingResource(booking, Optional.ofNullable(user), room, start, end, convertToServiceResourceList(booking.getServices()));
     }
@@ -85,6 +89,10 @@ public class BookingServiceImpl implements BookingService {
         List<AdditionalService> list = getServicesList(services);
         int amount = calculateAmount(start, end, roomRepo.findById(roomId).orElseThrow(() -> new EntityNotFoundException(Room.class, "roomId", String.valueOf(roomId))).getPrice());
         return new Resource<>(calculateServicesPrice(amount, start, end, list)/100, linkTo(methodOn(BookingController.class).create(null, start, end, roomId, services)).withRel("confirm_booking").withTitle("Confirm booking").withType("POST").withMedia("application/json"));
+    }
+
+    private boolean bookingExist(LocalDate start, LocalDate end, Room room, User user){
+        return bookingRepo.existsByRoomAndUserAndStartAndEnd(room, user, start, end);
     }
 
     private int calculateAmount(LocalDate start, LocalDate end, int price) {
@@ -102,7 +110,7 @@ public class BookingServiceImpl implements BookingService {
         return amount;
     }
 
-    private List<AdditionalService> getServicesList(long[] services) {
+    public List<AdditionalService> getServicesList(long[] services) {
         List<AdditionalService> list = new ArrayList<>();
         Arrays.stream(services)
                 .flatMap(LongStream::of)

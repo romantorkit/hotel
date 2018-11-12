@@ -5,21 +5,25 @@ import com.foxminded.hotel.resources.UserResource;
 
 public class UserTestDataFactory {
 
-    public static User getUser1() {
+    public static User getExistingUser() {
         User user = new User("tort", "1234", "Roman", "Torkit");
         user.setUserId(1L);
         return user;
     }
 
-    public static UserResource getUserResource() {
-        return new UserResource(getUser1());
+    public static UserResource getExistingUserResource() {
+        return new UserResource(getExistingUser());
     }
 
-    public static User getUser2() {
-        return new User("torkit", "1234", "Roman", "Torkit");
+    public static User getUserToLogin() {
+        return new User("tort", "$2a$10$fkdCewu6ob/KEHnmeRHGpegT3UQDHet3.uflaXtk7LQlUjpZgNZYa", "Roman", "Torkit");
     }
 
-    public static UserResource getUserResource2() {
-        return new UserResource(getUser2());
+    public static User getUserToRegister() {
+        return new User("torkit", "$2a$10$fkdCewu6ob/KEHnmeRHGpegT3UQDHet3.uflaXtk7LQlUjpZgNZYa", "Roman", "Torkit");
+    }
+
+    public static UserResource getUserToRegisterResource() {
+        return new UserResource(getUserToRegister());
     }
 }

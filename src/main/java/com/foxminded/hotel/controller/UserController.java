@@ -56,14 +56,9 @@ public class UserController {
     public ResponseEntity<Object> login(HttpSession session,
                                               @RequestParam String userName,
                                               @RequestParam String password) {
-        try {
-            User user = userService.login(userName, password);
-            session.setAttribute("sessionUser", user);
-            return ResponseEntity.ok(new UserResource(user));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Please login");
-        }
+        User user = userService.login(userName, password);
+        session.setAttribute("sessionUser", user);
+        return ResponseEntity.ok(new UserResource(user));
     }
 
     @GetMapping(path = "/{id}")

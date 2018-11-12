@@ -2,6 +2,7 @@ package com.foxminded.hotel.service;
 
 import com.foxminded.hotel.exception_handling.DuplicateEntryException;
 import com.foxminded.hotel.exception_handling.EntityNotFoundException;
+import com.foxminded.hotel.exception_handling.WrongCredentialsException;
 import com.foxminded.hotel.model.AdditionalService;
 import com.foxminded.hotel.model.User;
 import com.foxminded.hotel.repo.UserRepo;
@@ -30,12 +31,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User login(String username, String password) throws Exception{
-        User user = userRepo.findByUserName(username);
-        if (user.getUserName().equals(username) && encoder.matches(password, user.getPassword())){
+    public User login(String username, String password) {
+        User user = userRepo.findByUserName(username).orElseThrow(() -> new EntityNotFoundException(User.class, "userName", username));
+        String encoded = user.getPassword();
+        if (user.getUserName().equals(username) && encoder.matches(password, encoded)){
             return user;
         } else {
-            throw new Exception();
+            throw new WrongCredentialsException(User.class, "username", username, "password", password);
         }
     }
 
@@ -47,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<BookingResource> getBookingsById(Long id) {
-        return userRepo.getOne(id).getBookings()
+        return userRepo.findById(id).orElseThrow(() -> new EntityNotFoundException(User.class, "userId", String.valueOf(id))).getBookings()
                 .stream()
                 .map(booking -> new BookingResource(booking, Optional.ofNullable(booking.getUser()), booking.getRoom(), booking.getStart(), booking.getEnd(), convertToServiceResourceList(booking.getServices())))
                 .collect(Collectors.toList());
@@ -57,7 +59,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResource create(User user) {
 
-        if(userRepo.findByUserName(user.getUserName()) == null){
+        if(!userRepo.findByUserName(user.getUserName()).isPresent()){
             user.setRegistered(LocalDateTime.now());
             user.setPassword(encoder.encode(user.getPassword()));
             user = userRepo.save(user);

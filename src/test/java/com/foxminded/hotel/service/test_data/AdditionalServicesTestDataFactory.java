@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class AdditionalServicesTestDataFactory {
+
     public static AdditionalService getService1(){
         AdditionalService service = new AdditionalService("Breakfast", 15000, ChargePeriod.DAILY);
         service.setServiceId(1L);
@@ -27,7 +28,37 @@ public class AdditionalServicesTestDataFactory {
         return service;
     }
 
-    public static List<ServiceResource> getAllServices() {
+    public static List<AdditionalService> getServicesForRoom1() {
+        return Lists.newArrayList(getService1(), getService2());
+    }
+
+    public static AdditionalService getServiceById(long id){
+        if(id == 1){
+            return getService1();
+        } else if (id == 2) {
+            return getService2();
+        } else {
+            return getService3();
+        }
+
+    }
+
+    public static List<AdditionalService> getServices(AdditionalService... services){
+        return Lists.newArrayList(services);
+    }
+
+    public static List<AdditionalService> getAllServices(){
+        return Lists.newArrayList(getService1(), getService2(), getService3());
+    }
+
+//    public static List<ServiceResource> getServiceResources(AdditionalService... services){
+//        return Lists.newArrayList(services)
+//                .stream()
+//                .map(ServiceResource::new)
+//                .collect(Collectors.toList());
+//    }
+
+    public static List<ServiceResource> getAllServiceResource() {
         return Lists.newArrayList(getService1(), getService2(), getService3())
                 .stream()
                 .map(ServiceResource::new)

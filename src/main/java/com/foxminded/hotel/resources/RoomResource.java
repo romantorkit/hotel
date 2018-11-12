@@ -5,24 +5,17 @@ import com.foxminded.hotel.controller.BookingController;
 import com.foxminded.hotel.controller.RoomController;
 import com.foxminded.hotel.controller.UserController;
 import com.foxminded.hotel.enums.RoomCategory;
-import com.foxminded.hotel.model.AdditionalService;
-import com.foxminded.hotel.model.Booking;
 import com.foxminded.hotel.model.Room;
 import com.foxminded.hotel.model.User;
-import com.foxminded.hotel.repo.AdditionalServiceRepo;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.hateoas.ResourceSupport;
 
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
