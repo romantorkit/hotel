@@ -73,7 +73,7 @@ http://localhost:8080/bookings/price </br>
         `end` - date in format `YYYY-MM-DD` (required)</br>
         `roomId` - alpha numeric value of room's id  (required)</br>
         `services` - an array of additional service's ids in format `{1,2,...}` (optional)</br>
-##### 5. Make booking price
+##### 5. Book a room
     Booking a room requires login
 http://localhost:8080/bookings </br>
     **method:** `POST`</br>
