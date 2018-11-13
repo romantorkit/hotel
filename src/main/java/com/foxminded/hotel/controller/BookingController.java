@@ -28,7 +28,8 @@ public class BookingController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> bookings(HttpSession session) {
-        Optional<User> user = Optional.ofNullable((User) session.getAttribute("sessionUser"));
+//        Optional<User> user = Optional.ofNullable((User) session.getAttribute("sessionUser"));
+        Optional<User> user = Optional.empty();
         return ResponseEntity.ok(bookingService.findAll(user));
     }
 

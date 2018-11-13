@@ -66,3 +66,11 @@ http://localhost:8080/bookings/{id} </br>
     **method:** `GET`</br>
     **accepts parameters:**</br>
         `{id}` - alpha numeric value of booking's id  (required)</br>
+##### 4. Get booking price
+http://localhost:8080/bookings/price </br>
+    **method:** `GET`</br>
+    **accepts parameters:**</br>
+        `start` - date in format `YYYY-MM-DD` (required)</br>
+        `end` - date in format `YYYY-MM-DD` (required)</br>
+        `roomId` - alpha numeric value of room's id  (required)</br>
+        `services` - an array of additional service's ids in format `{1,2,...}` (optional)</br>
