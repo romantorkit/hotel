@@ -6,13 +6,13 @@ Application has the following endpoints:</br>
 
 ### Manipulating rooms
 ##### 1. Get all available rooms
-    if parameters like -start-, -end- are not present, then all rooms are displayed
 http://localhost:8080/rooms</br>
     **method:** `GET`</br>
     **accepts parameters:**</br>
     `start` - date in format `YYYY-MM-DD` (optional)</br>
     `end` - date in format `YYYY-MM-DD` (optional)</br>
     `category` - `SINGLE`, `DOUBLE`, `FAMILY`, `PRESIDENT` (optional)</br>
+`if parameters like -start-, -end- are not present, then all rooms are displayed`
 ##### 2. Get room by id
 http://localhost:8080/rooms/`id`</br>
     **method:** `GET`</br>
