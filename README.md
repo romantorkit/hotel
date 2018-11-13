@@ -1,6 +1,7 @@
 # hotel
-Start:  mvn install
-        spring-boot:run
+    A test application to operate a hotel booking system. Each response from the server contains hyper links to available actions with the returned resource.
+**Start:** `mvn install`, `spring-boot:run`
+        
         
 Application has the following endpoints:</br>
 
@@ -54,10 +55,8 @@ http://localhost:8080/users/{id}/bookings </br>
      `{id}` - alpha numeric value of user's id  (required)</br>
 ### Manipulating bookings
 ##### 1. Get a list of all bookings
-http://localhost:8080/bookings/{id} </br>
+http://localhost:8080/bookings </br>
     **method:** `GET`</br>
-    **accepts parameters:**</br>
-    `{id}` - alpha numeric value of user's id  (required)</br>
 ##### 2. Get information for a new booking page
 http://localhost:8080/bookings/new </br>
     **method:** `GET`</br>
@@ -69,6 +68,14 @@ http://localhost:8080/bookings/{id} </br>
 ##### 4. Get booking price
 http://localhost:8080/bookings/price </br>
     **method:** `GET`</br>
+    **accepts parameters:**</br>
+        `start` - date in format `YYYY-MM-DD` (required)</br>
+        `end` - date in format `YYYY-MM-DD` (required)</br>
+        `roomId` - alpha numeric value of room's id  (required)</br>
+        `services` - an array of additional service's ids in format `{1,2,...}` (optional)</br>
+##### 5. Make booking price
+http://localhost:8080/bookings </br>
+    **method:** `POST`</br>
     **accepts parameters:**</br>
         `start` - date in format `YYYY-MM-DD` (required)</br>
         `end` - date in format `YYYY-MM-DD` (required)</br>
