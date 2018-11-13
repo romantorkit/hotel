@@ -6,6 +6,7 @@ import com.foxminded.hotel.service.BookingService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,13 +26,13 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> bookings(HttpSession session) {
         Optional<User> user = Optional.ofNullable((User) session.getAttribute("sessionUser"));
         return ResponseEntity.ok(bookingService.findAll(user));
     }
 
-    @GetMapping(value = "/new")
+    @GetMapping(value = "/new", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> newBooking(HttpSession session,
                                         @RequestParam ("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Future(message = "PLease choose a correct start date") LocalDate start,
                                         @RequestParam ("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Future(message = "PLease choose a correct end date") LocalDate end,
@@ -45,12 +46,12 @@ public class BookingController {
 
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> booking(@PathVariable Long id) {
         return ResponseEntity.ok(bookingService.findById(id));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> create(HttpSession session,
                                     @RequestParam ("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Future LocalDate start,
                                     @RequestParam ("end") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) @Future LocalDate end,
@@ -64,7 +65,7 @@ public class BookingController {
         }
     }
 
-    @GetMapping("/price")
+    @GetMapping(path = "/price", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> price(@RequestParam ("start") @Future(message = "PLease choose a correct start date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
                                    @RequestParam ("end") @Future(message = "PLease choose a correct end date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end,
                                    @RequestParam ("roomId") Long roomId,
