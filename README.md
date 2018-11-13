@@ -1,5 +1,6 @@
 # hotel
-    A test application to operate a hotel booking system. Each response from the server contains hyper links to available actions with the returned resource.
+    A test application to operate a hotel booking system.
+    Each response from the server contains hyper links to available actions with the returned resource.
 **Start:** `mvn install`, `spring-boot:run`
         
         
